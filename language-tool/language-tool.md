@@ -69,4 +69,31 @@ Reload the vscode window... that's it.
 ## neovim
 NOTE: This setup was done using lazyvim, but if you are using some "fancier" version of nvim, you can probably figure it out from here.
 
-TODO: Coming ... currently I broke my neovim setup altogether due to running an old(er) os ... oops
+
+Add the following extension setup:
+```lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        ltex = {
+          settings = {
+            ltex = {
+              languageToolHttpServerUri = "http://localhost:8081/v2",
+              language = "en-GB",
+              additionalRules = {
+                enablePickyRules = true,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+```
+into the `nvim ~/.config/nvim/lua/plugins/languagetool.lua` file. Make sure that vimtex is installed (via lang.tex in "Lazy" for lazyvim)
+
+## Accessing from different machines on the same local network
+Simply use: `http://ip-of-host-here:8081/v2`, i.e. use the IP of the hosting machine instead of localhost.
