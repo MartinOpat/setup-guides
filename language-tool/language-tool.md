@@ -66,4 +66,7 @@ Go to settings (for this extension).
 Put `http://localhost:8081/v2` into the "Ltex: Language Tool Http Server Uri" setting.
 Reload the vscode window... that's it.
 
+## neovim
+NOTE: This setup was done using lazyvim, but if you are using some "fancier" version of nvim, you can probably figure it out from here.
 
+TODO: Coming ... currently I broke my neovim setup altogether due to running an old(er) os ... oops
