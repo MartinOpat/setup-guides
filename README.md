@@ -10,3 +10,4 @@ Currently includes the rough guides on setting up the following:
 - Self-hosted languagetool server (grammarly replacement): [language-tool.md](/language-tool/language-tool.md)
 - WireGuard: [./wireguard/wireguard.md]
 - Simple, self-hosted camera system using Motion: [motion.md](./motion/motion.md) 
+- Self-hosted Element server (discord replacement): [element.md](./element/element.md)
