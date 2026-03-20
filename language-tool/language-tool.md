@@ -97,3 +97,90 @@ into the `nvim ~/.config/nvim/lua/plugins/languagetool.lua` file. Make sure that
 
 ## Accessing from different machines on the same local network
 Simply use: `http://ip-of-host-here:8081/v2`, i.e. use the IP of the hosting machine instead of localhost.
+
+## More advanced setup
+To apply changes make sure to:
+```bash
+sudo docker compose down
+sudo docker rmi container-id  # optional, to delete the old container
+sudo docker compose up -d
+```
+
+
+### ngrams
+This image does not download it automatically, but we still want to use it of course. Download the EN (or whatever language) file:
+```bash
+mkdir ngrams && cd ngrams
+wget https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
+```
+
+Unzip it and clean up:
+```bash
+unzip ngrams-en-20150817.zip
+rm ngrams-en-20150817.zip
+```
+
+Note that you will need to update your file accordingly, with something like:
+```YAML
+  services:
+    environment:
+      - langtool_languageModel=/ngrams
+    volumes:
+      - ./ngrams:/ngrams:ro
+```
+
+### Custom rules
+Create a `languagetool.cfg` file:
+```bash
+touch languagetool.cfg
+```
+
+And paste your rules setup, e.g.:
+```
+# General English
+enabledRules.en=IN_ORDER_TO,DUE_TO_THE_FACT,AT_THIS_POINT_IN_TIME
+enabledCategories.en=PLAIN_ENGLISH,REDUNDANCY,STYLE
+
+# American English
+enabledRules.en-US=IN_ORDER_TO,DUE_TO_THE_FACT,AT_THIS_POINT_IN_TIME
+enabledCategories.en-US=PLAIN_ENGLISH,REDUNDANCY,STYLE
+
+# British English (The Missing Link!)
+enabledRules.en-GB=IN_ORDER_TO,DUE_TO_THE_FACT,AT_THIS_POINT_IN_TIME
+enabledCategories.en-GB=PLAIN_ENGLISH,REDUNDANCY,STYLE
+```
+
+Update your `docker-compose.yml` to the following:
+```yml
+
+---
+services:
+  languagetool:
+    image: meyay/languagetool:latest
+    container_name: languagetool
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:exec
+    cap_drop:
+      - ALL
+    cap_add:
+      - CAP_CHOWN
+      - CAP_DAC_OVERRIDE
+      - CAP_SETUID
+      - CAP_SETGID
+    security_opt:
+      - no-new-privileges
+    ports:
+      - 8081:8081
+    environment:
+      download_ngrams_for_langs: en
+      MAP_UID: 783
+      MAP_GID: 783
+      langtool_rulesFile: "/config/languagetool.cfg"
+    volumes:
+      - ./ngrams:/ngrams
+      - ./fasttext:/fasttext
+      - ./languagetool.cfg:/config/languagetool.cfg:ro
+```
+
