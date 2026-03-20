@@ -97,6 +97,54 @@ into the `nvim ~/.config/nvim/lua/plugins/languagetool.lua` file. Make sure that
 
 Note: Replace localhost by the actual address in case you are not running the languagetool locally.
 
+If you would like the "add to dictionary" feature to work, you will need the "ltex_extra" extension and a slightly longer setup (instead of the one above):
+```lua
+return {
+  {
+    -- Ltex server
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "barreiroleo/ltex_extra.nvim",
+    },
+    opts = {
+      servers = {
+        ltex = {
+          settings = {
+            ltex = {
+              languageToolHttpServerUri = "http://192.168.2.10:8081/v2",
+              language = "en-GB",
+              additionalRules = {
+                enablePickyRules = true,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  -- ltex ltex_extra
+  {
+    "barreiroleo/ltex_extra.nvim",
+    opts = {
+      load_langs = { "en-GB" },
+      init_check = true,
+      path = vim.fn.stdpath("config") .. "/spell",
+    },
+    config = function(_, opts)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.name == "ltex" then
+            require("ltex_extra").setup(opts)
+          end
+        end,
+      })
+    end,
+  },
+}
+```
+
 ## Accessing from different machines on the same local network
 Simply use: `http://ip-of-host-here:8081/v2`, i.e. use the IP of the hosting machine instead of localhost.
 
