@@ -60,7 +60,7 @@ After clicking through all the "confirm", "got it", "blah-blah" prompts. Click t
 
 Alternatively, [this website]( https://thecrow.uk/languagetool-is-an-ai-powered-grammar-checker-you-can-self-host-on-your-own-hardware/) contains a decent, yet slightly outdated, setup guide also.
 
-## vscodee
+## vscode
 Install "LTeX – LanguageTool grammar/spell checking" by "Julian Valentin".
 Go to settings (for this extension).
 Put `http://localhost:8081/v2` into the "Ltex: Language Tool Http Server Uri" setting.
@@ -93,7 +93,9 @@ return {
   },
 }
 ```
-into the `nvim ~/.config/nvim/lua/plugins/languagetool.lua` file. Make sure that vimtex is installed (via lang.tex in "Lazy" for lazyvim)
+into the `nvim ~/.config/nvim/lua/plugins/languagetool.lua` file. Make sure that vimtex is installed (via lang.tex in "Lazy" for lazyvim).
+
+Note: Replace localhost by the actual address in case you are not running the languagetool locally.
 
 ## Accessing from different machines on the same local network
 Simply use: `http://ip-of-host-here:8081/v2`, i.e. use the IP of the hosting machine instead of localhost.
@@ -151,7 +153,7 @@ enabledCategories.en-GB=PLAIN_ENGLISH,REDUNDANCY,STYLE
 ```
 
 Update your `docker-compose.yml` to the following:
-```yml
+```YAML
 
 ---
 services:
