@@ -16,7 +16,9 @@ sudo apt update
 sudo apt install wireguard
 ```
 
-Now, we generate the private and public keys for both the host and the client. The command to generate wireguard keys is:
+
+### Host
+Now, we generate the private and public keys for the client. The command to generate wireguard keys is:
 ```bash
 sudo mkdir -p /etc/wireguard                                                                                                                 ─╯
 sudo bash -c 'umask 077; wg genkey > /etc/wireguard/server_private.key'
@@ -26,11 +28,9 @@ sudo chown root:root /etc/wireguard/server_private.key /etc/wireguard/server_pub
 sudo chmod 600 /etc/wireguard/server_private.key
 sudo chmod 644 /etc/wireguard/server_public.key
 ```
-For the client, name the keys `client_private.key` and `client_public.key` if you want to be consistent with this guide.
 
 
-**Host**
-To create the server config - put the following into `/etc/wireguard/wg0.conf`:
+To create the server config, put the following into `/etc/wireguard/wg0.conf`:
 ```ini
 [Interface]
 Address = 10.200.200.1/24
@@ -74,7 +74,33 @@ echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-wireguard.conf
 sudo sysctl --system
 ```
 
-**Client**
+### Client
+Now, we generate the private and public keys for both the host. The command to generate wireguard keys is:
+```bash
+sudo mkdir -p /etc/wireguard                                                                                                                 ─╯
+sudo bash -c 'umask 077; wg genkey > /etc/wireguard/client_private.key'
+sudo bash -c 'wg pubkey < /etc/wireguard/client_private.key > /etc/wireguard/client_public.key'
+
+sudo chown root:root /etc/wireguard/client_private.key /etc/wireguard/client_public.key
+sudo chmod 600 /etc/wireguard/client_private.key
+sudo chmod 644 /etc/wireguard/client_public.key
+```
+
+To start wireguard:
+```bash
+sudo systemctl start wg-quick@wg0
+```
+To check status:
+```bash
+sudo systemctl status wg-quick@wg0
+sudo wg show
+```
+To stop wireguard:
+```
+sudo systemctl stop wg-quick@wg0
+```
+
+
 Create the client-side config in `/etc/wireguard/wg0.conf`:
 ```ini
 [Interface]
@@ -89,7 +115,9 @@ AllowedIPs = 10.200.200.0/24
 PersistentKeepalive = 25
 ```
 
-## Client on Android
+
+
+## Android Setup (Client only)
 Install [the android app](https://play.google.com/store/apps/details?id=com.wireguard.android&hl=en).
 
 To create the interface section on Android, click the "+" and then "Create from scratch", and name it, e.g.: "home-vpn".
