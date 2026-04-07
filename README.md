@@ -11,7 +11,7 @@ Currently includes the rough guides on setting up the following:
 - WireGuard (VPN but for traffic protection, not Netflix watching): [wireguard.md](./wireguard/wireguard.md)
 - Simple, self-hosted camera system using Motion: [motion.md](./motion/motion.md) 
 - Self-hosted Element server (discord replacement): [element.md](./element/element.md)
-- Self-hosted Servarr (Netflix + Spotify replacement): TODO: Path
+- Self-hosted Servarr (Netflix + Spotify replacement): [setup.md](./servarr/setup.md)
   Includes the setup for:
   - Radarr
   - Sonarr
