@@ -192,5 +192,63 @@ sudo docker compose -f servarr-compose.yml up -d
 It is convenient (but completely optional) to able to access these services through a domain instead of having to tunnel into your local network (tho of course, the latter is more secure). To make sure the external routing is secure, we will not reinvent the wheel and simply use [Cloudlfare](https://www.cloudflare.com/) zero-trust free service. Note, that Cloudlfare UI is bound to change so in this guide the paths described correspond to the semantics of where you want to go rather to actual buttons on Cloudlfare's webpage.
 
 
-Go to Cloudlfare and navigate to `Zero Trust > Networks > Tunnles`
+Go to Cloudlfare and navigate to `Zero Trust > Networks > Tunnels`. Create a CloudeFlared tunnel and run the command that should be present at the end of the setup in your local terminal (on the server that these services will be running on).
+Next, we need to create mappings for the local ports. With the default ports, this would be something like:
+- jellyfin.yourdomain.com --> http://localhost:8096
+- music.yourdomain.com --> http://localhost:4553
+- radarr.yourdomain.com --> http://localhost:7878
+- sonarr.yourdomain.com --> http://localhost:8989
+- requests.yourdomain.com --> http://localhost:5055
+- lidarr.yourdomain.com --> http://localhost:8686
 
+Since we are exposing ports to the internet, we want to make sure this is secure by using Cloudlfare's zero-trust "lockdown". We can set it up by:
+- going to `Access > Applications`
+- Add a "Self-Hosted Application" and name it (e.g. Servarr Protect)
+- Apply it to the "radarr", "sonarr", and "lidarr" subdomains.
+- Create and apply a policy (in the cloudflare UI) allowing only a personal email address via a PIN code. Note that Jellyfin, Jellyseer and Navidrome should be left open.
+
+## Configuration(s)
+### qBittorrent
+Open `http://localhost:8080` on the computer running the stack (i.e. the server). The UI will ask you to login, the temporary password can be access by running:
+```bash
+sudo docker logs qBittorrent
+```
+It is probably a good idea to change the temporary password via the UI (settings).
+
+After logging in, we need to make sure that the downloads folder is the one we set up earlier. Navigate to `Options > Downloads` in the qBittorrent UI, and change the default safe path to `/data/torrents`.
+
+To make sure the network "stuff" is correctly connected and the killswitch (turn off internet if something goes down to avoid IP exposure etc.) is working, go to `Options > Advanced` and change the network interface to "tun0". Save and restart:
+```bash
+sudo docker restart qbittorrent
+```
+
+To make the setup easier, it is recommended to bypass authentication for cients on localhost so the different services can talk to each other (locally) without a hassle. To do this, go to `Options > Web UI` and check "Bypass authentication for client on localhost".
+
+(Optionally, you might want to set some rules to avoid seeding forever. The defaults are pretty good, e.g.: "When ratio reaches 1.0, then stop torrent").
+
+### Prowlarr & FlareSolverr
+Open `http://localhost:9696`.
+To add the FlareSolverr proxy (and avoid being flagged as a bot), go to `Settings > Indexer Proxies`, and add FlareSolverr (`http://localhost:8191`). Give it the tag "flare" and save.
+
+Next, we need to add some trackers. Go to `Indexers` and pick some popular ones from the list (e.g. 1337x or piratebay). Make sure to assign the tag "flare" from the previous step. Save.
+
+Next, we link the apps: Radarr (`http://localhost:7878`), Sonarr (`http://localhost:8989`), and Lidarr (`http://localhost:8686`). You will need to get the API keys from the settings of each of the respective apps. Test. Save. Sync.
+
+### Radarr, Sonarr, Lidarr
+The configuration for these three is pretty much equivalent and boils down to:
+- Set the root folder: `Settings > Media Management`. Add `/data/media/movies` (radarr), `/data/media/tv` (sonarr), or `/data/media/music` (lidarr).
+- Connect qBittorrent: `Settings > Download Clients`. Add qBittorrent (`localhost:8080`).
+
+### Jellyseer
+(This part is optional, using Jellyfin by itself is perfectly plausbile ... but Jellyseer gives more of that "using Netflix" vibe.)
+
+With Jellyseer properly setup (which ideally will be the case after following this section of this guide), it can serve as the single access point for all of the things we set up earlier. We have mapped Jellyseer to `requests.yourdomain.com`. 
+
+First, we need to connect the backend(s):
+- Jellyfin: Sign-in with your Jellyfind admin credentials and sync the libraries.
+- Radar/Sonarr: Jellyseer is not in the "VPN stack", meaning to access these from the Jellyseer, we must use the server's local LAN ip (e.g. `192.168.1.10` - you can find this out by running `hostname -I` in the terminal). Then, the full address for radarr would be `192.168.1.10:7878` and for sonarr `192.168.1.10:8989`. 
+(Note, that Jellyseer does not support Lidarr. To access Lidar through the browser, one can simply go to `music.yourdomain.com`. Alternatively, to access it in the phone, [Symfonium](https://symfonium.app/) is a good option.)
+
+## Fixes & Tips
+### The "Play" button on Jellyseer
+To make that button work correctly and actually redirect to Jellyfin (where we will actually consume the media), go to `Settings > Jellyfin` in Jellyseer's GUI. Here, we need to edit the server, i.e. set the external URL to `http://jellyfin.martin-opat.com`.
