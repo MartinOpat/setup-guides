@@ -247,7 +247,7 @@ With Jellyseer properly setup (which ideally will be the case after following th
 First, we need to connect the backend(s):
 - Jellyfin: Sign-in with your Jellyfind admin credentials and sync the libraries.
 - Radar/Sonarr: Jellyseer is not in the "VPN stack", meaning to access these from the Jellyseer, we must use the server's local LAN ip (e.g. `192.168.1.10` - you can find this out by running `hostname -I` in the terminal). Then, the full address for radarr would be `192.168.1.10:7878` and for sonarr `192.168.1.10:8989`. 
-(Note, that Jellyseer does not support Lidarr. To access Lidar through the browser, one can simply go to `music.yourdomain.com`. Alternatively, to access it in the phone, [Symfonium](https://symfonium.app/) is a good option.)
+(Note, that Jellyseer does not support Lidarr. To access Lidar through the browser, one can simply go to `music.yourdomain.com`. Alternatively, to access it in the phone, [Symfonium](https://symfonium.app/) is a good option. For a Spotify-like experience in the browser, see [feishin](https://github.com/jeffvli/feishin/blob/development/media/preview_album_detail.png).)
 
 ## Fixes & Tips
 ### The "Play" button on Jellyseer
