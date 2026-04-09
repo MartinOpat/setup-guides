@@ -252,3 +252,8 @@ First, we need to connect the backend(s):
 ## Fixes & Tips
 ### The "Play" button on Jellyseer
 To make that button work correctly and actually redirect to Jellyfin (where we will actually consume the media), go to `Settings > Jellyfin` in Jellyseer's GUI. Here, we need to edit the server, i.e. set the external URL to `http://jellyfin.martin-opat.com`.
+
+### Night-mode
+Set no seeding during the night - if someone is supposed to have a worsened sleep quality, it will be only for downloading, not uploading (or neither).
+
+In qBittorrent: `Tools > Options > Speed`. Set alternative rate limit and its schedule as desired.
