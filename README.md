@@ -21,3 +21,5 @@ Currently includes the rough guides on setting up the following:
   - Jellyfin
   - Navidrome
   - Jellyseerr
+
+- Aider: [setup.md](./aider/setup.md), [usage.md](./aider/usage-guide.md)
