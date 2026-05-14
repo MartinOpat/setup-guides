@@ -11,6 +11,17 @@ export AIDER_ATTRIBUTE_AUTHOR=false
 export AIDER_ATTRIBUTE_COMMITTER=false
 ```
 
+## Running
+You can run Aider by executing the following command:
+```bash
+aider --model ollama/deepseek-r1:70b
+```
+or the alternative disabling auto-commits altogether:
+```bash
+aider --model ollama_chat/deepseek-r1:70b --no-auto-commits
+```
+inside the GitHub repo you want to use Aider with.
+
 
 ## Common commands
 ### File & Context Management
