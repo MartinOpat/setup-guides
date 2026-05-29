@@ -106,7 +106,6 @@ Create the client-side config in `/etc/wireguard/wg0.conf`:
 [Interface]
 Address = 10.200.200.2/32
 PrivateKey = <client_privkey>
-DNS = 1.1.1.1
 
 [Peer]
 PublicKey = <server_pubkey>
