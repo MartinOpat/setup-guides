@@ -111,6 +111,7 @@ Almost there. If we want users outside our local network to be able to chat with
 We need two rules:
 - TCP port 80 to host local IP
 - TCP port 443 to host local IP
+- All the turn server ports, see `coturn.conf` (TCP/UDP for the listening ports, UDP only for the larger range)
 You can find your local ip by running your favourite terminal command, e.g. `ip addr` or `hostname -I`.
 
 Finally, launch everything:
