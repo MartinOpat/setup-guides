@@ -1,5 +1,8 @@
 #!/bin/sh
-if busctl --user status com.mitchellh.ghostty >/dev/null 2>&1; then
+
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$PATH"
+
+if pgrep -u "$USER" -x ghostty >/dev/null; then
   exec ghostty +new-window
 else
   exec ghostty
