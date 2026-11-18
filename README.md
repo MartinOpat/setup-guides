@@ -25,5 +25,6 @@ Currently includes the rough guides on setting up the following:
 - Aider: [setup.md](./aider/setup.md), [usage.md](./aider/usage-guide.md)
 - Pop!_Os keyboard shortcuts file(s): [setup.md](./pop_os-shortcuts/setup.md)
 - nvim (lazyvim) setup: [setup.md](./nvim/setup.md)
+- Some convenience git setttings: [setup.md](./git/setup.md)
 
 
