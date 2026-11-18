@@ -107,7 +107,7 @@
         ],
         key: "Return",
         description: Some("ghostty"),
-    ): Spawn("ghostty +new-window"),
+    ): Spawn("/home/martin/custom/my-ghostty"),
     (
         modifiers: [
             Alt,
