@@ -23,3 +23,5 @@ Currently includes the rough guides on setting up the following:
   - Jellyseerr
 
 - Aider: [setup.md](./aider/setup.md), [usage.md](./aider/usage-guide.md)
+- Pop!_Os keyboard shortcuts file(s)
+
